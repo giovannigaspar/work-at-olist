@@ -14,6 +14,16 @@ app.config.from_object(config)
 app.jinja_env.cache = {}
 
 
+@app.route('/version')
+"""
+    Get app version.
+
+    :return: App version.
+"""
+def get_version():
+    return __version__
+
+
 @app.route('/')
 def login_page():
     return 'Hello World!'
