@@ -40,8 +40,9 @@ def get_dict_resultset(sql, param, results):
 
     try:
         cur.execute(sql, param)
-    except Exception:
+    except Exception as e:
         cur.execute('ROLLBACK')
+        print(str(e))
         return None
 
     if results == ONE:
