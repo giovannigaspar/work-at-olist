@@ -7,23 +7,23 @@ __status__ = "Development"
 
 from flask import Flask
 from app import config
+from app.routes import bp_routes
 
 
-app = Flask(__name__)
-app.config.from_object(config)
-app.jinja_env.cache = {}
+app = Flask(__name__) # Flask default syntax
+app.config.from_object(config) # Getting APP configs from file
+app.jinja_env.cache = {} # Disabling some caches for better performance
 
 
 @app.route('/version')
-"""
+def get_version():
+    """
     Get app version.
 
     :return: App version.
-"""
-def get_version():
+    """
     return __version__
 
 
-@app.route('/')
-def login_page():
-    return 'Hello World!'
+# Registering routes
+app.register_blueprint(bp_routes)
