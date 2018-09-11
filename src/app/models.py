@@ -15,11 +15,10 @@ def start_call(js):
             destination,
             call_id
         ) VALUES (%s, %s, %s, %s)
-        ON CONFLICT(call_id) DO UPDATE CALLS SET
+        ON CONFLICT(call_id) DO UPDATE SET
             timestamp_begin=%s,
             source=%s,
             destination=%s
-        WHERE call_id=%s
         RETURNING id
     '''
     params = (
@@ -30,8 +29,7 @@ def start_call(js):
 
         js.get('timestamp'),
         js.get('source'),
-        js.get('destination'),
-        js.get('call_id')
+        js.get('destination')
     )
     return get_dict_resultset(sql, params, ONE)
 
@@ -47,18 +45,16 @@ def end_call(js):
         INSERT INTO CALLS (
             timestamp_end,
             call_id
-        )
-        ON CONFLICT(call_id) DO UPDATE CALLS SET
-            timestamp_end=%s,
-        WHERE call_id=%s
+        ) VALUES (%s, %s)
+        ON CONFLICT(call_id) DO UPDATE SET
+            timestamp_end=%s
         RETURNING id
     '''
     params = (
         js.get('timestamp'),
         js.get('call_id'),
 
-        js.get('timestamp'),
-        js.get('call_id')
+        js.get('timestamp')
     )
     return get_dict_resultset(sql, params, ONE)
 
