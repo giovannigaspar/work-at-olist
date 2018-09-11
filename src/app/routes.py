@@ -7,13 +7,17 @@ bp_routes = Blueprint('routes', __name__)
 
 @bp_routes.route('/call', methods=['POST'])
 def call_record():
+    """
+    Route used to start/end a call. Receives a JSON contaning
+    """
     js = request.get_json()
     call_type = js.get('type', '')
+    r = None
     if (call_type == 'start'):
-        start_call(js)
+        r = start_call(js)
     elif (call_type == 'end'):
-        end_call(js)
-    abort(404)
+        r = end_call(js)
+    return jsonify(objects=r) if r else abort(500)
 
 
 @bp_routes.route('/phone/<phone_number>/bill', methods=['GET'])

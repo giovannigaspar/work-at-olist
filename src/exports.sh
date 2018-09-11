@@ -1,5 +1,5 @@
 # Database Parameters
-export DATABASE_URL='olist_test'
+export DATABASE_NAME='olist_test'
 export DATABASE_USER='sysdba'
 export DATABASE_PASSWORD='masterkey'
 
