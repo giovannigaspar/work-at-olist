@@ -17,36 +17,35 @@
 
 
 ## Creating database
-  $ sudo su postgres
+    $ sudo su postgres
 
-  $ createuser -P -s -e sysdba
-  - usar senha "masterkey" (sem aspas)
+    $ createuser -P -s -e sysdba
+      - use the password "masterkey" (no quotes)
 
-  $ createdb olist_test
+    $ createdb olist_test
 
-  $ psql -d olist_test -1 -f <filename>.sql
-
-    where <filename> is the file tables.sql within this project
+    $ psql -d olist_test -1 -f <filename>.sql
+      where <filename> is the file tables.sql within this project
 
 ## How to run the project
-  *$ sudo apt-get install python-pip
+    *$ sudo apt-get install python-pip
 
-  *$ sudo apt-get install python3-venv
+    *$ sudo apt-get install python3-venv
 
-  $ cd project_directory
+    $ cd project_directory
 
-  *$ mkdir env
+    *$ mkdir env
 
-  *$ python3 -m venv env
+    *$ python3 -m venv env
 
-  $ source env/bin/activate
+    $ source env/bin/activate
 
-  $ cd src
+    $ cd src
 
-  $ source exports.sh
+    $ source exports.sh
 
-  *$ pip install -U pip
+    *$ pip install -U pip
 
-  *$ pip install -r requirements.txt
+    *$ pip install -r requirements.txt
 
 **Obs:** *Only necessary on first execution
