@@ -1,3 +1,6 @@
+from flask import abort
+
+
 def numbers_only(s):
     """
     Filters a string and extract numbers from it.
@@ -12,3 +15,10 @@ def numbers_only(s):
         if d in n:
             r += d
     return r
+
+
+def validate_params(params, js):
+    for param in params:
+        if not js.get(param, None):
+            abort(500, "Missing parameter " + str(param) +" in JSON")
+    return True
