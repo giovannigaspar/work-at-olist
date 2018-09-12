@@ -1,20 +1,18 @@
 from flask import jsonify
 from app.db import get_dict_resultset, ONE, ALL
 from app.tools import validate_params
-from app.bill import calculate_call_tariff
+from app.bill import _calculate_call_tariff
 
 
 def start_call(js):
     """
-    INSERT a new call to the database or UPDATE if it is already there.
-    Since inconsistencies can happen, it's possible to receive the "end signal"
-    before the "start signal".
+    INSERT a new call to the database.
     If one of the required parameters is not present, return an HTTP error.
 
     :param js: JSON contaning the necessary parameters.
 
-    :return: JSON containing the ID of the inserted/updated item or an error
-    containing the HTTP status code 500.
+    :return: JSON containing the ID of the inserted item or an error containing
+    the HTTP status code 500.
     """
 
     validate_params(['call_id', 'timestamp', 'source', 'destination'], js)
@@ -26,82 +24,91 @@ def start_call(js):
             destination,
             call_id
         ) VALUES (%s, %s, %s, %s)
-        ON CONFLICT(call_id) DO UPDATE SET
-            timestamp_begin=%s,
-            source=%s,
-            destination=%s
         RETURNING id
     '''
     params = (
         js.get('timestamp'),
         js.get('source'),
         js.get('destination'),
-        js.get('call_id'),
-
-        js.get('timestamp'),
-        js.get('source'),
-        js.get('destination')
+        js.get('call_id')
     )
     return jsonify(get_dict_resultset(sql, params, ONE))
 
 
 def end_call(js):
     """
-    UPDATE a call in database based on its unique "call_id".
-    Since inconsistencies can happen, the code will try to insert if the
-    "call_id" is not yet present.
+    Terminate a call.
+    UPDATE a call in database based on its unique "call_id": set the ending time
+    of the call and calculate the call tariff.
     If one of the required parameters is not present, return an HTTP error.
 
     :param js: JSON contaning the necessary parameters.
 
-    :return: JSON containing the ID of the inserted/updated item or an error
-    containing the HTTP status code 500.
+    :return: JSON containing the ID of the updated item or an error containing
+    the HTTP status code 500.
     """
 
     validate_params(['call_id', 'timestamp'], js)
 
     sql = '''
-        INSERT INTO CALLS (
-            timestamp_end,
-            call_id
-        ) VALUES (%s, %s)
-        ON CONFLICT(call_id) DO UPDATE SET
+        UPDATE CALLS SET
             timestamp_end=%s
-        RETURNING id
+        WHERE (
+            (call_id=%s) AND
+            (timestamp_end > timestamp_begin)
+        )
+        RETURNING timestamp_begin, duration, id
     '''
     params = (
         js.get('timestamp'),
-        js.get('call_id'),
-
-        js.get('timestamp')
+        js.get('call_id')
     )
-    # Maybe I should calculate the price after inserting the end call
-    # Update where call_id = X and timestamp_begin is not null
-    # I must assume that every call already has a "begin"
-    # ToDo: New Logic!
-    return jsonify(get_dict_resultset(sql, params, ONE))
+    r = jsonify(get_dict_resultset(sql, params, ONE))
+
+    if r:
+        price = _calculate_call_tariff(
+            r['timestamp_begin'],
+            js.get('timestamp'),
+            r['duration']
+        )
+        sql = '''
+            UPDATE CALLS SET
+                price=%s
+            WHERE id=%s
+            RETURNING id
+        '''
+        params = (
+            price,
+            r['id']
+        )
+        return jsonify(get_dict_resultset(sql, params, ONE))
 
 
-def get_bill(phone_number):
-    # ToDo -> Just a placeholder
+def get_bill(phone_number, period):
+    """
+    Get a subscriber bill within the given period.
+    """
     sql = '''
         SELECT
-            timestamp_begin,
-            timestamp_end,
-            (EXTRACT(EPOCH FROM (timestamp_end - timestamp_begin))) as duration,
-            price
+            destination,
+            timestamp_begin::DATE as call_start_date,
+            timestamp_begin::TIME as call_start_time,
+            (timestamp_end - timestamp_begin) as duration,
+            price as call_price
         FROM CALLS
         WHERE (
             (timestamp_end IS NOT NULL) AND
             (timestamp_begin IS NOT NULL) AND
-            (timestamp_end > timestamp_begin)
+            (timestamp_end > timestamp_begin) AND
+            (source = %s) AND
+            (EXTRACT(MONTH FROM timestamp_end) = %s) AND
+            (EXTRACT(YEAR FROM timestamp_end) = %s)
         )
     '''
-    sql_result = get_dict_resultset(sql, None, ALL)
-    if sql_result:
-        for item in sql_result:
-            calculate_call_tariff(
-                item['timestamp_begin'],
-                item['timestamp_end']
-            )
-    return jsonify(get_dict_resultset(sql, None, ALL))
+    period = period.split('/')
+    params = (
+        phone_number,
+        period[0],
+        period[1]
+    )
+    return jsonify(get_dict_resultset(sql, params, ALL))

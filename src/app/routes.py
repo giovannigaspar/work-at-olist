@@ -1,3 +1,4 @@
+import datetime
 from flask import request, abort, Blueprint
 from app.models import start_call, end_call, get_bill
 from app.tools import validate_phone_number
@@ -34,8 +35,20 @@ def call_record():
     return r if r else abort(500, "Invalid JSON")
 
 
+# Example: URL/phone/99988526423/bill?period=12/2017
 @bp_routes.route('/phone/<phone_number>/bill', methods=['GET'])
 def get_phone_bill(phone_number):
+    period = request.args.get('period', None)
+    now = datetime.datetime.now()
+    if not period:
+        month = (now.month-1) if (now.month > 1) else 12
+        year = (now.year) if (month != 12) else (now.year-1)
+        period = (str(month)+'/'+str(year))
+    else:
+        period = period.lstrip('0')
+        if (period == (str(now.month)+'/'+str(now.year))):
+            abort(500, 'The current period is not yet closed!')
+    print(period)
     validate_phone_number(phone_number)
-    r = get_bill(phone_number)
+    r = get_bill(phone_number, period)
     return r if r else abort(500)
