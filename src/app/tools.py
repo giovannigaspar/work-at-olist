@@ -17,6 +17,21 @@ def numbers_only(s):
     return r
 
 
+def validate_phone_number(phone_number):
+    """
+    Validate the length of a phone number.
+
+    :param phone_number: Number to be validated.
+
+    :return: True if phone is valid or HTTP status code 500 if it's not.
+    """
+
+    p = numbers_only(phone_number)
+    if ((len(p) != 10) and (len(p) != 11)):
+        abort(500, "Invalid phone number!")
+    return True
+
+
 def validate_params(params, js):
     """
     Validate a list of parameters based on a JSON. If one of the required
