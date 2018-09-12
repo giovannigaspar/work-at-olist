@@ -12,7 +12,7 @@ def test_data_insert(body):
     jsondataasbytes = jsondata.encode('utf-8')
     req.add_header('Content-Length', len(jsondataasbytes))
     response = urllib.request.urlopen(req, jsondataasbytes)
-    return response
+    return response.read()
 
 def main():
     # Opening JSON sample file
