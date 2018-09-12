@@ -5,7 +5,7 @@ def numbers_only(s):
     """
     Filters a string and extract numbers from it.
 
-    :param s: String to be analised.
+    :param s: String to be analysed.
     :return: String containing numbers only.
     """
 
@@ -23,8 +23,8 @@ def validate_params(params, js):
     parameters is not present, the application will abort and return a HTTP
     status code 500 containing a message describing the missing parameter.
 
-    :param params: List of the parameters to be analised.
-    :param js: JSON to be analised.
+    :param params: List of the parameters to be analysed.
+    :param js: JSON to be analysed.
 
     :return: True if all parameters are present or HTTP status code 500 if one
     or more is missing.
