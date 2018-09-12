@@ -83,7 +83,7 @@ def get_bill(phone_number):
         SELECT
             timestamp_begin,
             timestamp_end,
-            (timestamp_end - timestamp_begin) as duration
+            (EXTRACT(EPOCH FROM (timestamp_end - timestamp_begin))) as duration
         FROM CALLS
         WHERE (
             (timestamp_end IS NOT NULL) AND
@@ -91,4 +91,4 @@ def get_bill(phone_number):
             (timestamp_end > timestamp_begin)
         )
     '''
-    return get_dict_resultset(sql, None, ALL)
+    return jsonify(get_dict_resultset(sql, None, ALL))

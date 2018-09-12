@@ -1,5 +1,6 @@
 from flask import request, abort, Blueprint
 from app.models import start_call, end_call, get_bill
+from app.tools import validate_phone_number
 
 
 bp_routes = Blueprint('routes', __name__)
@@ -35,5 +36,6 @@ def call_record():
 
 @bp_routes.route('/phone/<phone_number>/bill', methods=['GET'])
 def get_phone_bill(phone_number):
-    # ToDo: Need to insert period!
-    get_bill(phone_number)
+    validate_phone_number(phone_number)
+    r = get_bill(phone_number)
+    return r if r else abort(500)
