@@ -7,19 +7,25 @@ __status__ = "Development"
 
 from flask import Flask
 from flask.json import JSONEncoder
-from datetime import timedelta, datetime
+from datetime import timedelta, datetime, date, time
 from app import config
 from app.routes import bp_routes
 
 
-# Custom JSON encoder, since, by default, FLASK won't decode a datetime as ISO
+# Custom JSON encoder, since, by default, FLASK won't decode the timestamps the
+# way it is needed in this application.
 class CustomJSONEncoder(JSONEncoder):
     def default(self, obj):
         try:
-            #if isinstance(obj, timedelta):
-            #    return str(obj)
+            if isinstance(obj, timedelta):
+                t = str(obj).split(':')
+                return (t[0]+'h:')+(t[1]+'m:')+(t[2]+'s')
             if isinstance(obj, datetime):
                 return obj.isoformat()
+            if isinstance(obj, date):
+                return str(obj)
+            if isinstance(obj, time):
+                return str(obj)
         except TypeError:
             pass
         return super().default(obj)
