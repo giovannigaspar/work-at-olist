@@ -8,7 +8,15 @@ def start_call(js):
     INSERT a new call to the database or UPDATE if it is already there.
     Since inconsistencies can happen, it's possible to receive the "end signal"
     before the "start signal".
+    If one of the required parameters is not present, return an HTTP error.
+
+    :param js: JSON contaning the necessary parameters.
+
+    :return: JSON containing the ID of the inserted/updated item or an error
+    containing the HTTP status code 500.
     """
+
+    validate_params(['call_id', 'timestamp', 'source', 'destination'], js)
 
     sql = '''
         INSERT INTO CALLS (
@@ -41,6 +49,12 @@ def end_call(js):
     UPDATE a call in database based on its unique "call_id".
     Since inconsistencies can happen, the code will try to insert if the
     "call_id" is not yet present.
+    If one of the required parameters is not present, return an HTTP error.
+
+    :param js: JSON contaning the necessary parameters.
+
+    :return: JSON containing the ID of the inserted/updated item or an error
+    containing the HTTP status code 500.
     """
 
     validate_params(['call_id', 'timestamp'], js)

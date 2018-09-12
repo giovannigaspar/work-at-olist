@@ -42,7 +42,7 @@ def get_dict_resultset(sql, param, results):
         cur.execute(sql, param)
     except Exception as e:
         cur.execute('ROLLBACK')
-        print(str(e))
+        print(str(e)) # Debug
         return None
 
     if results == ONE:
