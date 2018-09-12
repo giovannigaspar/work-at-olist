@@ -1,6 +1,7 @@
-from app.db import get_dict_resultset, ONE, ALL
 from flask import jsonify
+from app.db import get_dict_resultset, ONE, ALL
 from app.tools import validate_params
+from app.bill import calculate_call_tariff
 
 
 def start_call(js):
@@ -74,6 +75,10 @@ def end_call(js):
 
         js.get('timestamp')
     )
+    # Maybe I should calculate the price after inserting the end call
+    # Update where call_id = X and timestamp_begin is not null
+    # I must assume that every call already has a "begin"
+    # ToDo: New Logic!
     return jsonify(get_dict_resultset(sql, params, ONE))
 
 
@@ -83,7 +88,8 @@ def get_bill(phone_number):
         SELECT
             timestamp_begin,
             timestamp_end,
-            (EXTRACT(EPOCH FROM (timestamp_end - timestamp_begin))) as duration
+            (EXTRACT(EPOCH FROM (timestamp_end - timestamp_begin))) as duration,
+            price
         FROM CALLS
         WHERE (
             (timestamp_end IS NOT NULL) AND
@@ -91,4 +97,11 @@ def get_bill(phone_number):
             (timestamp_end > timestamp_begin)
         )
     '''
+    sql_result = get_dict_resultset(sql, None, ALL)
+    if sql_result:
+        for item in sql_result:
+            calculate_call_tariff(
+                item['timestamp_begin'],
+                item['timestamp_end']
+            )
     return jsonify(get_dict_resultset(sql, None, ALL))
