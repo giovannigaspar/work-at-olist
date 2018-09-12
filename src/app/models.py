@@ -55,20 +55,26 @@ def end_call(js):
             timestamp_end=%s
         WHERE (
             (call_id=%s) AND
-            (timestamp_end > timestamp_begin)
+            (timestamp_begin is not null) AND
+            (timestamp_end is null)
         )
-        RETURNING timestamp_begin, duration, id
+        RETURNING
+            timestamp_begin,
+            timestamp_end,
+            (timestamp_begin - %s ) as duration,
+            id
     '''
     params = (
         js.get('timestamp'),
-        js.get('call_id')
+        js.get('call_id'),
+        js.get('timestamp')
     )
-    r = jsonify(get_dict_resultset(sql, params, ONE))
+    r = get_dict_resultset(sql, params, ONE)
 
     if r:
         price = _calculate_call_tariff(
             r['timestamp_begin'],
-            js.get('timestamp'),
+            r['timestamp_end'],
             r['duration']
         )
         sql = '''
@@ -87,6 +93,18 @@ def end_call(js):
 def get_bill(phone_number, period):
     """
     Get a subscriber bill within the given period.
+
+    :param phone_number: Subscriber's phone number
+    :param period: The bill period (MM/YYYY)
+
+    :return: JSON containing the bill data if it's available. Example:
+      {
+        "call_price": "R$0,99",
+        "call_start_date": "2017-12-12",
+        "call_start_time": "15:07:13",
+        "destination": "9993468278",
+        "duration": "0h:07m:43s"
+      }
     """
     sql = '''
         SELECT
@@ -94,7 +112,7 @@ def get_bill(phone_number, period):
             timestamp_begin::DATE as call_start_date,
             timestamp_begin::TIME as call_start_time,
             (timestamp_end - timestamp_begin) as duration,
-            price as call_price
+            ('R$' || ' ' || price) as call_price
         FROM CALLS
         WHERE (
             (timestamp_end IS NOT NULL) AND
