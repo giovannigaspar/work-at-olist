@@ -35,9 +35,15 @@ def call_record():
     return r if r else abort(500, "Invalid JSON")
 
 
-# Example: URL/phone/99988526423/bill?period=12/2017
 @bp_routes.route('/phone/<phone_number>/bill', methods=['GET'])
 def get_phone_bill(phone_number):
+    """
+    Route to get a subscriber bill.
+    Receibe the subscriber phone number in the URL and the period as an
+    argument.
+
+    For example: http://localhost/phone/99988526423/bill?period=12/2017
+    """
     period = request.args.get('period', None)
     now = datetime.datetime.now()
     if not period:
