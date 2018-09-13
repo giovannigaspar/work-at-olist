@@ -1,3 +1,11 @@
+"""
+This module is used for tests only.
+
+Sends several "POST HTTP Requests" to a URL (in this case, the url used to
+start/end calls).
+"""
+
+
 import urllib.request
 import json
 
@@ -22,4 +30,5 @@ def main():
             print(test_data_insert(item))
 
 
+# Calling the main function
 main()

@@ -1,3 +1,10 @@
+"""
+Database module.
+
+Module responsible for all the database operations: configure, connect, execute
+"""
+
+
 import os
 import psycopg2
 import psycopg2.extras
@@ -22,8 +29,8 @@ def get_dict_resultset(sql, param, results):
     Execute a database operation and return the results (if applicable) as
     a dictionary.
 
-    If the operation is well succeeded, a "commit" operation will be made in the
-    database. Otherwise, a "rollback" operation will be made.
+    If the operation is well succeeded, a "commit" operation will be made in
+    the database. Otherwise, a "rollback" operation will be made.
 
     :param sql: SQL instruction to be executed.
     :param param: SQL parameters.

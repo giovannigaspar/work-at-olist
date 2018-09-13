@@ -1,3 +1,10 @@
+"""
+Module used to run the application in a sandbox (development environment).
+
+Example: python3 run.py
+"""
+
+
 from app import app
 
 

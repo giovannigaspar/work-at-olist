@@ -1,3 +1,11 @@
+"""
+Useful functions.
+
+This module is responsible for some useful tools/functions that are used in the
+application.
+"""
+
+
 from flask import abort
 
 
@@ -16,7 +24,6 @@ def numbers_only(s):
             r += d
     return r
 
-
 def validate_phone_number(phone_number):
     """
     Validate the length of a phone number.
@@ -30,7 +37,6 @@ def validate_phone_number(phone_number):
     if ((len(p) != 10) and (len(p) != 11)):
         abort(500, "Invalid phone number!")
     return True
-
 
 def validate_params(params, js):
     """

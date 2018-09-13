@@ -1,3 +1,17 @@
+"""
+Module responsible for configuring all the application's URLs (routes) and
+to receive/parse the parameters. Uses the default FLASK system called
+"Blueprints".
+
+NOTE: As this is a small application, all the routes are located in a single
+file. It's recommended, though, to create one file for each group of routes.
+For example: a file named "calls_route.py" containing the POST/PUT/DELETE/GET
+responsible only for operations related to "calls".
+
+See http://flask.pocoo.org/docs/1.0/blueprints/ for more info.
+"""
+
+
 import datetime
 from flask import request, abort, Blueprint
 from app.models import start_call, end_call, get_bill
@@ -33,7 +47,6 @@ def call_record():
     elif (call_type == 'end'):
         r = end_call(js)
     return r if r else abort(500, "Invalid JSON")
-
 
 @bp_routes.route('/phone/<phone_number>/bill', methods=['GET'])
 def get_phone_bill(phone_number):

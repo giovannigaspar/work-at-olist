@@ -1,3 +1,11 @@
+"""
+This module is a bridge between the URLs (see "routes.py") and the database
+(see "db.py"). All the functions/methods will manipulate/validate the data and
+return a default response structure. For every route, there is a method linked
+to it here.
+"""
+
+
 from flask import jsonify
 from app.db import get_dict_resultset, ONE, ALL
 from app.tools import validate_params
@@ -34,12 +42,11 @@ def start_call(js):
     )
     return jsonify(get_dict_resultset(sql, params, ONE))
 
-
 def end_call(js):
     """
     Terminate a call.
-    UPDATE a call in database based on its unique "call_id": set the ending time
-    of the call and calculate the call tariff.
+    UPDATE a call in database based on its unique "call_id": set the ending
+    time of the call and calculate the call tariff.
     If one of the required parameters is not present, return an HTTP error.
 
     :param js: JSON contaning the necessary parameters.
@@ -88,7 +95,6 @@ def end_call(js):
             r['id']
         )
         return jsonify(get_dict_resultset(sql, params, ONE))
-
 
 def get_bill(phone_number, period):
     """

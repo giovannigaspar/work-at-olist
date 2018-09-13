@@ -1,10 +1,18 @@
+"""
+Module used to calculate a phone bill.
+"""
+
+
 import datetime
 
 
+# Fixed values for more flexibility. When changed, will reflect in all
+# application
 STANDING_CHARGE = 0.36
 DAY_TAX = 0.09
 
 
+# The simplest way of doing it!!! :)
 def _calculate_call_tariff(begin, end, duration):
     """
     Calculate the call tariff based on the call start, end and duration.
@@ -22,7 +30,8 @@ def _calculate_call_tariff(begin, end, duration):
     # Best scenario: one comparison
     # Worst scenario: one comparison + loop
     # Very fast, even looping through 24h+ calls
-    if not (((begin.hour < 6) or (begin.hour >= 22)) and ((end.hour < 6) or (end.hour >= 22))):
+    if not (((begin.hour < 6) or (begin.hour >= 22)) and
+            ((end.hour < 6) or (end.hour >= 22))):
         while (current_time < end):
             if (current_time.hour >= 6) and (current_time.hour < 22):
                 minutes = (minutes+1)

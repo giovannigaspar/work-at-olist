@@ -1,3 +1,11 @@
+"""
+Main application module.
+
+Configures the "FLASK" framework and registers the URLs used by the
+application.
+"""
+
+
 __author__ = "Giovanni Gaspar"
 __version__ = "0.1"
 __maintainer__ = "Giovanni Gaspar"
@@ -12,8 +20,8 @@ from app import config
 from app.routes import bp_routes
 
 
-# Custom JSON encoder, since, by default, FLASK won't decode the timestamps the
-# way it is needed in this application.
+# Custom JSON encoder, since, by default, FLASK won't decode the timestamps
+# the way it is needed in this application.
 class CustomJSONEncoder(JSONEncoder):
     def default(self, obj):
         try:
@@ -32,7 +40,7 @@ class CustomJSONEncoder(JSONEncoder):
 
 
 app = Flask(__name__) # Flask default syntax
-app.json_encoder = CustomJSONEncoder
+app.json_encoder = CustomJSONEncoder # Defining a custom JSONEncoder
 app.config.from_object(config) # Getting APP configs from file
 app.jinja_env.cache = {} # Disabling some caches for better performance
 
