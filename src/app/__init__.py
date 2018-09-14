@@ -13,7 +13,7 @@ __email__ = "giovannigaspar@outlook.com"
 __status__ = "Development"
 
 
-from flask import Flask
+from flask import Flask, render_template
 from flask.json import JSONEncoder
 from datetime import timedelta, datetime, date, time
 from app import config
@@ -47,7 +47,7 @@ app.jinja_env.cache = {} # Disabling some caches for better performance
 
 @app.route('/')
 def home():
-    return "Hi there!!! Welcome to my app ;)"
+    return render_template('index.html')
 
 @app.route('/version')
 def get_version():
