@@ -205,6 +205,13 @@
                     <div class="row">
                         <div class="col">
                             <div class="form-group">
+                                <label for="callSubscriber" class="col-form-label">Subscriber:</label>
+                                <input type="text" class="form-control"
+                                    id="callSubscriber" maxlength="11" value="99988526423">
+                            </div>
+                        </div>
+                        <div class="col">
+                            <div class="form-group">
                                 <label for="callPMonth" class="col-form-label">Month:</label>
                                 <input type="number" class="form-control"
                                        id="callPMonth" min='1' max='12' value="12">
@@ -219,9 +226,24 @@
                         </div>
                     </div>
                     <button type="button" class="btn btn-success float-right"
-                            id="btnGetData">Get Bill <span class="fas fa-money-check-alt fa-fw"></span>
+                            id="btnGetBill">Get Bill <span class="fas fa-money-check-alt fa-fw"></span>
                     </button>
                 </div>
+            </div>
+            <div id="tableContainer"> <!--  class="invisible" -->
+                <table class="table table-sm table-light table-bordered table-hover table-responsive-sm">
+                    <thead class="thead-light">
+                        <tr>
+                            <th width="80">Destination</th>
+                            <th width="90">Date</th>
+                            <th width="90">Time</th>
+                            <th width="80">Duration</th>
+                            <th width="80">Price</th>
+                        </tr>
+                    </thead>
+                    <tbody id="tableBody">
+                    </tbody>
+                </table>
             </div>
         </div>
 
