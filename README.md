@@ -57,7 +57,7 @@ a linux environment (Ubuntu 18.04 x64). The database used is PostgreSQL.
 
 ## Testing
 
-With the app running, open another terminal and go the project dir and run the
+With the app running, open another terminal, go to the project dir and run the
 following command:
 
     $ python3 src/tests.py
