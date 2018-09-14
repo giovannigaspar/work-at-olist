@@ -118,7 +118,7 @@
                             </div>
                             <div class="form-group">
                                 <label for="callSource" class="col-form-label">Source:</label>
-                                <input type="text" class="form-control" id="callSource">
+                                <input type="text" class="form-control" id="callSource" maxlength="11">
                             </div>
                         </div>
                         <div class="col">
@@ -132,12 +132,13 @@
                             </div>
                             <div class="form-group">
                                 <label for="callDestination" class="col-form-label">Destination:</label>
-                                <input type="text" class="form-control" id="callDestination">
+                                <input type="text" class="form-control" id="callDestination" maxlength="11">
                             </div>
                         </div>
                     </div>
-                    <button type="button" class="btn btn-primary float-right"
-                            id="btnSendCallInfo">Confirm
+                    <button type="button" class="btn btn-success float-right"
+                            id="btnSendCallInfo">Send Data
+                        <span class="fas fa-fw fa-phone-volume" data-fa-transform="rotate--40 flip-h"></span>
                     </button>
                 </div>
             </div>
@@ -195,6 +196,33 @@
                 closed yet), the application will automatically return the last
                 valid period (the last month).
             </p>
+            <p>
+                Since our database is already populated, it's possible to show
+                an example of retrieving data. Check it below:
+            </p>
+            <div class="card shadow p-3 mb-5 bg-white rounded">
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col">
+                            <div class="form-group">
+                                <label for="callPMonth" class="col-form-label">Month:</label>
+                                <input type="number" class="form-control"
+                                       id="callPMonth" min='1' max='12' value="12">
+                            </div>
+                        </div>
+                        <div class="col">
+                            <div class="form-group">
+                                <label for="callPYear" class="col-form-label">Year:</label>
+                                <input type="number" class="form-control"
+                                       id="callPYear" min='1990' value="2017">
+                            </div>
+                        </div>
+                    </div>
+                    <button type="button" class="btn btn-success float-right"
+                            id="btnGetData">Get Bill <span class="fas fa-money-check-alt fa-fw"></span>
+                    </button>
+                </div>
+            </div>
         </div>
 
         <h3>Credits</h3>
