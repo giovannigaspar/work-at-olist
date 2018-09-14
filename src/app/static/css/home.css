@@ -1,0 +1,15 @@
+p {
+    text-align: justify;
+}
+
+.booticon {
+	display: inline-block;
+	width: 16px;
+	height: 16px;
+	font-size: 8pt;
+	color: #fff;
+    text-align: center;
+	background-color: #6f5499;
+	border: 1px solid #cdbfe3;
+    border-radius: 25%;
+}
