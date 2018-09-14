@@ -20,10 +20,27 @@ function Example()
     };
 
     this.onBtnSendDataClick = function() {
+        let subscriber = $('#callSubscriber').val();
+        let month = $('#callPMonth').val();
+        let year = $('#callPYear').val();
+
+        month = (month.length === 1) ? ('0'+month) : month;
+
+        if (!(utils.isNumber(subscriber) && (subscriber.length > 9))) {
+            utils.showWarningMessage('Invalid subscriber number!');
+            return;
+        }
+
+        if ((year.length === 0) || (month.length === 0)) {
+            utils.showWarningMessage('Fill all the fields!');
+            return;
+        }
+
         req.getJSONRequest(
-            '/phone/99988526423/bill?period=12/2017',
+            '/phone/'+subscriber+'/bill?period='+month+'/'+year,
             this.sendDataCallBack, null, this
         );
+
     };
     this.sendDataCallBack = function(data, self) {
         if (data !== 'error') {
@@ -32,8 +49,6 @@ function Example()
 
             let content = '';
             for (const key in data) {
-                console.log(data[key]);
-
                 content +=
                     '<tr>' +
                         '<td>' + data[key]['destination'] + '</td>' +
@@ -45,7 +60,7 @@ function Example()
             }
             $tableBody.append(content);
         } else {
-            // ToDo
+            utils.showErrorMessage('Something wrong happened. Sorry for that! :(');
         }
     };
 }
