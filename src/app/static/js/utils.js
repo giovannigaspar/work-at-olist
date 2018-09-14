@@ -78,5 +78,4 @@ function Utils()
 
 $(document).ready(function(){
     utils = new Utils();
-    utils.init();
 });

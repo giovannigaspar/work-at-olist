@@ -55,7 +55,7 @@ def get_phone_bill(phone_number):
     Receibe the subscriber phone number in the URL and the period as an
     argument.
 
-    For example: http://localhost/phone/99988526423/bill?period=12/2017
+    For example: http://localhost:5000/phone/99988526423/bill?period=12/2017
     """
     period = request.args.get('period', None)
     now = datetime.datetime.now()

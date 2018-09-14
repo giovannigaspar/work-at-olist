@@ -15,11 +15,66 @@ function Example()
         });
 
         $('#btnGetBill').on('click', function() {
+            ex.onBtnGetDataClick();
+        });
+
+        $('#btnSendCallInfo').on('click', function() {
             ex.onBtnSendDataClick();
         });
     };
 
+    /*============================= Sending Data =============================*/
     this.onBtnSendDataClick = function() {
+        let type = $('#callType').val();
+        let callID = $('#callCallID').val();
+        let callDate = $('#callTDate').val();
+        let callTime = $('#callTTime').val();
+        let source = $('#callSource').val();
+        let destination = $('#callDestination').val();
+
+        if ((callID.length === 0) || (callDate.length === 0) ||
+            (callTime.length === 0)) {
+            utils.showWarningMessage('Fill all the fields!');
+            return;
+        }
+
+        if (type === 'start') {
+            if ((source.length < 10) || (destination.length < 10)) {
+                utils.showWarningMessage('Fill all the fields!');
+                return;
+            }
+            if (!((utils.isNumber(source)) && (utils.isNumber(destination)))) {
+                utils.showWarningMessage(
+                    'One or more phone numbers are invalids!');
+                return;
+            }
+        }
+
+        let timestamp = (
+            new Date(callDate).toISOString().split('T')[0] +
+            'T' + callTime + ':00Z'
+        );
+
+        let jsonArgs = {
+            "type"          : type,
+            "call_id"       : callID,
+            "timestamp"     : timestamp,
+            "source"        : source,
+            "destination"   : destination
+        };
+        req.postJSONRequest(
+            '/call', jsonArgs, this.sendDataCallBack, this);
+    };
+    this.sendDataCallBack = function(data, jsonArgs, self) {
+        if (data !== 'error') {
+            utils.showSuccessMessage('Succesfully sent data! ID: '+data['id']);
+        } else {
+            utils.showErrorMessage('Something wrong happened. Sorry for that! :(');
+        }
+    };
+
+    /*============================= Getting Data =============================*/
+    this.onBtnGetDataClick = function() {
         let subscriber = $('#callSubscriber').val();
         let month = $('#callPMonth').val();
         let year = $('#callPYear').val();
@@ -38,11 +93,11 @@ function Example()
 
         req.getJSONRequest(
             '/phone/'+subscriber+'/bill?period='+month+'/'+year,
-            this.sendDataCallBack, null, this
+            this.getDataCallBack, null, this
         );
 
     };
-    this.sendDataCallBack = function(data, self) {
+    this.getDataCallBack = function(data, self) {
         if (data !== 'error') {
             let $tableBody = $('#tableBody');
             $tableBody.html('');
