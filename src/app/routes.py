@@ -67,7 +67,6 @@ def get_phone_bill(phone_number):
         period = period.lstrip('0')
         if (period == (str(now.month)+'/'+str(now.year))):
             abort(500, 'The current period is not yet closed!')
-    print(period)
     validate_phone_number(phone_number)
     r = get_bill(phone_number, period)
     return r if r else abort(500)
