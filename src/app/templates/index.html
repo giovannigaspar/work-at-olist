@@ -44,7 +44,11 @@
         <h2>The API</h2>
         <p>
             This API basically has two visible URLs: One responsible for
-            inserting data and one for retrieving it.
+            inserting data and one for retrieving it. You can send to the server
+            information about a phone call, like: Number that made the call,
+            number that received it, the start and  the end of the call, etc.<br/>
+            These values will later be used to calculate the duration and the
+            price of the calls.
         </p>
         <div class="container">
             <h4>Inserting data</h4>
@@ -93,6 +97,103 @@
                 </div>
                 <b>Note: </b> you can't end a call if you didn't start it first.
                 The call starting and ending are linked through the <i>call_id</i>.
+            </p>
+            <p>
+                To show how it works, you can use the example below:
+            </p>
+            <div class="card shadow p-3 mb-5 bg-white rounded">
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col">
+                            <div class="form-group">
+                                <label for="callType" class="col-form-label">Type:</label>
+                                <select id="callType" class="custom-select">
+                                    <option value="start" selected>Start</option>
+                                    <option value="end">End</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label for="callTDate" class="col-form-label">Date:</label>
+                                <input type="date" class="form-control" id="callTDate">
+                            </div>
+                            <div class="form-group">
+                                <label for="callSource" class="col-form-label">Source:</label>
+                                <input type="text" class="form-control" id="callSource">
+                            </div>
+                        </div>
+                        <div class="col">
+                            <div class="form-group">
+                                <label for="callCallID" class="col-form-label">Call ID:</label>
+                                <input type="number" class="form-control" id="callCallID" min="1">
+                            </div>
+                            <div class="form-group">
+                                <label for="callTTime" class="col-form-label">Time:</label>
+                                <input type="time" class="form-control" id="callTTime">
+                            </div>
+                            <div class="form-group">
+                                <label for="callDestination" class="col-form-label">Destination:</label>
+                                <input type="text" class="form-control" id="callDestination">
+                            </div>
+                        </div>
+                    </div>
+                    <button type="button" class="btn btn-primary float-right"
+                            id="btnSendCallInfo">Confirm
+                    </button>
+                </div>
+            </div>
+        </div>
+        <div class="container">
+            <h4>Retrieving data</h4>
+            <p>
+                If you want to get the bill for a specific phone (subscriber) on
+                a determined period (month), you can use the following URL:
+            </p>
+            <p><samp>
+                &emsp;&emsp;<var>
+                    http://&lt;SERVER_URL&gt;/phone/&lt;PHONE_NUMBER&gt;/bill?period=PERIOD
+                </var>
+            </samp></p>
+            <p>
+                To use the URL above, just replace the &lt;PHONE_NUMBER&gt;
+                with a valid number and the PERIOD with the month and year you
+                want. This way, you will get a JSON with all the calls within the
+                specified period. An example of a valid URL would be:
+            </p>
+            <p><samp>
+                &emsp;&emsp;<var>
+                    http://&lt;SERVER_URL&gt;/phone/99988526423/bill?period=12/2017
+                </var>
+            </samp>
+            </p>
+            <p>
+                Below, an example of a succesful retrieved data:
+            </p>
+            <p>
+                <div class="card">
+                    <div class="card-body">
+                        <samp>
+                            [<br/>
+                                &emsp;&emsp;{<br/>
+                                    &emsp;&emsp;&emsp;&emsp;"call_price": "R$ 0.99",<br/>
+                                    &emsp;&emsp;&emsp;&emsp;"call_start_date": "2017-12-12",<br/>
+                                    &emsp;&emsp;&emsp;&emsp;"call_start_time": "15:07:13",<br/>
+                                    &emsp;&emsp;&emsp;&emsp;"destination": "9993468278",<br/>
+                                    &emsp;&emsp;&emsp;&emsp;"duration": "0h:07m:43s"<br/>
+                                &emsp;&emsp;},<br/>
+                                &emsp;&emsp;{<br/>
+                                    &emsp;&emsp;&emsp;&emsp;"call_price": "R$ 0.36",<br/>
+                                    &emsp;&emsp;&emsp;&emsp;"call_start_date": "2017-12-12",<br/>
+                                    &emsp;&emsp;&emsp;&emsp;"call_start_time": "22:47:56",<br/>
+                                    &emsp;&emsp;&emsp;&emsp;"destination": "9993468278",<br/>
+                                    &emsp;&emsp;&emsp;&emsp;"duration": "0h:03m:00s"<br/>
+                                &emsp;&emsp;}<br/>
+                            ]<br/>
+                        </samp>
+                    </div>
+                </div>
+                <b>Note: </b> If you select an invalid period (a period that is not
+                closed yet), the application will automatically return the last
+                valid period (the last month).
             </p>
         </div>
 
