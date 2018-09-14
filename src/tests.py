@@ -12,7 +12,7 @@ import json
 
 def test_data_insert(body):
     # Default request parameters
-    request_url = "http://localhost:8080/call"
+    request_url = "http://localhost:5000/call"
     req = urllib.request.Request(request_url)
     req.add_header('Content-Type', 'application/json; charset=utf-8')
 
