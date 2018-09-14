@@ -16,12 +16,7 @@ ALL = 2
 
 
 # Database connection using enviroment variables (see file exports.sh)
-conn = psycopg2.connect(
-    host='localhost',
-    dbname=os.getenv('DATABASE_NAME'),
-    user=os.getenv('DATABASE_USER'),
-    password=os.getenv('DATABASE_PASSWORD')
-)
+conn = psycopg2.connect(os.getenv('DATABASE_URL'))
 
 
 def get_dict_resultset(sql, param, results):

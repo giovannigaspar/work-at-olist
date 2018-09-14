@@ -45,6 +45,10 @@ app.config.from_object(config) # Getting APP configs from file
 app.jinja_env.cache = {} # Disabling some caches for better performance
 
 
+@app.route('/')
+def home():
+    return "Hi there!!! Welcome to my app ;)"
+
 @app.route('/version')
 def get_version():
     """
