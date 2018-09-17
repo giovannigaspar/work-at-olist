@@ -1,5 +1,5 @@
 """
-Module used to run the application in a sandbox (development environment).
+Module used to run the application.
 
 Example: python3 run.py
 """
