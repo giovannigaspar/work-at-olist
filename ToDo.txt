@@ -2,5 +2,7 @@ This is a list of some improvements that I would've done if this was a "real" pr
 
 - Add a security layer (for example: encrypted API Key)
 - Improve the ERROR handling (it's pretty basic right now)
+- Add logs
 - Improve the API Docs
 - Improve testing
+
